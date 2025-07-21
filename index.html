@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>My Shop PWA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#4CAF50" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icon-192x192.png" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        /* زر التثبيت */
+        #installBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            display: none; /* مخفي افتراضي */
+            z-index: 9999;
+        }
+        #installBtn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" style="display:none;">
+        <h1>Welcome to My Shop!</h1>
+        <p>Experience the power of a simple, installable PWA.</p>
+        <button onclick="alert('This could open a shop or feature in future!')">Shop Now</button>
+    </div>
+
+    <!-- زر التثبيت -->
+    <button id="installBtn">📲 تثبيت التطبيق</button>
+
+    <script>
+        // تسجيل الـ Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(() => alert('✅ تم تسجيل Service Worker بنجاح'))
+                .catch(err => alert('❌ فشل تسجيل Service Worker: ' + err));
+        }
+
+        // عرض الكارد بعد 4 ثواني
+        setTimeout(() => {
+            document.querySelector('.card').style.display = 'block';
+        }, 4000);
+
+        // زر التثبيت والمتغير المؤجل
+        const installBtn = document.getElementById('installBtn');
+        let deferredPrompt;
+
+        // التقاط حدث beforeinstallprompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'block';
+        });
+
+        // حدث الضغط على زر التثبيت
+        installBtn.addEventListener('click', async () => {
+            installBtn.style.display = 'none';
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const choiceResult = await deferredPrompt.userChoice;
+            if (choiceResult.outcome === 'accepted') {
+                alert('✅ شكراً لك، تم تثبيت التطبيق بنجاح!');
+            } else {
+                alert('❌ تم رفض تثبيت التطبيق.');
+            }
+            deferredPrompt = null;
+        });
+
+        // عند تثبيت التطبيق فعليًا
+        window.addEventListener('appinstalled', () => {
+            alert('✅ تم تثبيت التطبيق بنجاح!');
+            installBtn.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

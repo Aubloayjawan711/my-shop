@@ -41,7 +41,7 @@
     </div>
 
     <!-- زر التثبيت -->
-    <button id="installBtn">📲 تثبيت التطبيق</button>
+    <!-- <button id="installBtn">📲 تثبيت التطبيق</button> -->
 
     <script>
         // تسجيل الـ Service Worker
@@ -51,41 +51,36 @@
                 .catch(err => alert('❌ فشل تسجيل Service Worker: ' + err));
         }
 
-        // عرض الكارد بعد 4 ثواني
-        setTimeout(() => {
-            document.querySelector('.card').style.display = 'block';
-        }, 4000);
-
         // زر التثبيت والمتغير المؤجل
-        const installBtn = document.getElementById('installBtn');
-        let deferredPrompt;
+    //     const installBtn = document.getElementById('installBtn');
+    //     let deferredPrompt;
 
-        // التقاط حدث beforeinstallprompt
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.style.display = 'block';
-        });
+    //     // التقاط حدث beforeinstallprompt
+    //     window.addEventListener('beforeinstallprompt', (e) => {
+    //         e.preventDefault();
+    //         deferredPrompt = e;
+    //         installBtn.style.display = 'block';
+    //     });
 
-        // حدث الضغط على زر التثبيت
-        installBtn.addEventListener('click', async () => {
-            installBtn.style.display = 'none';
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            const choiceResult = await deferredPrompt.userChoice;
-            if (choiceResult.outcome === 'accepted') {
-                alert('✅ شكراً لك، تم تثبيت التطبيق بنجاح!');
-            } else {
-                alert('❌ تم رفض تثبيت التطبيق.');
-            }
-            deferredPrompt = null;
-        });
+    //     // حدث الضغط على زر التثبيت
+    //     installBtn.addEventListener('click', async () => {
+    //         installBtn.style.display = 'none';
+    //         if (!deferredPrompt) return;
+    //         deferredPrompt.prompt();
+    //         const choiceResult = await deferredPrompt.userChoice;
+    //         if (choiceResult.outcome === 'accepted') {
+    //             alert('✅ شكراً لك، تم تثبيت التطبيق بنجاح!');
+    //         } else {
+    //             alert('❌ تم رفض تثبيت التطبيق.');
+    //         }
+    //         deferredPrompt = null;
+    //     });
 
-        // عند تثبيت التطبيق فعليًا
-        window.addEventListener('appinstalled', () => {
-            alert('✅ تم تثبيت التطبيق بنجاح!');
-            installBtn.style.display = 'none';
-        });
-    </script>
+    //     // عند تثبيت التطبيق فعليًا
+    //     window.addEventListener('appinstalled', () => {
+    //         alert('✅ تم تثبيت التطبيق بنجاح!');
+    //         installBtn.style.display = 'none';
+    //     });
+      </script>
 </body>
 </html>
